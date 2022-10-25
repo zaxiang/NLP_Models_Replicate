@@ -3,4 +3,4 @@ DSC180A
 
 ## Models' F1_Score Table
 
-(images/evaluation_table.png)
+![alt text](images/evaluation_table.png)

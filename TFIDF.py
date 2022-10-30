@@ -13,7 +13,16 @@ from sklearn.metrics import f1_score
 from sklearn.metrics import accuracy_score
 from numpy.linalg import norm
 
-class Tokenization:
+import nltk.corpus
+nltk.download('stopwords')
+from nltk.corpus import stopwords
+
+from nltk.stem import WordNetLemmatizer 
+nltk.download('wordnet')
+nltk.download('omw-1.4')
+lemmatizer = WordNetLemmatizer()
+
+class tfidf_Tokenization:
 
 	def __init__(self, dataset_path):
 
@@ -27,9 +36,7 @@ class Tokenization:
 		self.X_train = self.df['sentence'].tolist()
 
 
-	def token_X(self):
-
-		print('tokenizing...')
+	def tokenization(self, token_doc):
 
 		tfidf_vectorizer = TfidfVectorizer()
 		tokenizer = tfidf_vectorizer.build_tokenizer()
@@ -37,17 +44,27 @@ class Tokenization:
 		punct = string.punctuation
 		stemmer = PorterStemmer()
 
+		english_stops = set(stopwords.words('english'))
+
 		X_token = []
-		for doc in self.X_train:
+		for doc in token_doc:
 			doc = doc.lower()
 			doc = [i for i in doc if not (i in punct)] # non-punct characters
 			doc = ''.join(doc) # convert back to string
 			words = tokenizer(doc) # tokenizes
-			for i in range(len(words)): #stemmer
-				words[i] = stemmer.stem(words[i])
+			words = [w for w in words if w not in english_stops] #remove stop words
+			words = [lemmatizer.lemmatize(stemmer.stem(w)) for w in words] #stemmer and lemmatizer
+
 			X_token.append(words)
-	    
+
 		return X_token
+
+
+	def token_X(self):
+
+		print('tokenizing documents...')
+		return self.tokenization(self.X_train)
+
 
 	def modify_seeds(self):
 
@@ -55,25 +72,9 @@ class Tokenization:
 			cla_lis = self.seeds_dic[clas]
 
 			token_input = [' '.join(cla_lis)]
+			token_seed = self.tokenization(token_input)
 
-			#repeat the token_X function
-			tfidf_vectorizer = TfidfVectorizer()
-			tokenizer = tfidf_vectorizer.build_tokenizer()
-		    
-			punct = string.punctuation
-			stemmer = PorterStemmer()
-
-			X_token = []
-			for doc in token_input:
-				doc = doc.lower()
-				doc = [i for i in doc if not (i in punct)] # non-punct characters
-				doc = ''.join(doc) # convert back to string
-				words = tokenizer(doc) # tokenizes
-				for i in range(len(words)): #stemmer
-					words[i] = stemmer.stem(words[i])
-				X_token.append(words)
-
-			new_lis = X_token[0]
+			new_lis = token_seed[0]
 			self.seeds_dic[clas] = new_lis
 
 		return self.seeds_dic
@@ -111,16 +112,15 @@ class tfidf:
 		dic_tfidf = defaultdict(int)
     
 		for w in doc:
-			dic_tfidf[w] += 1
+			dic_tfidf[w] += 1 #get the tf
         
 		counter = 0
 		for s in seeds:
 			if s in self.idf_dic:
-				#print("yeahhh")
 				counter += 1
 				dic_tfidf[s] = dic_tfidf[s] * numpy.log((len(self.X_train) / self.idf_dic[s]))
 			else:
-				#print("no way..")
+				print("no way... the seed {} is not in any tokenized document".format(s))
 				dic_tfidf[s] = 0
 			sum_tfidf += dic_tfidf[s] 
         
@@ -134,11 +134,15 @@ class tfidf:
 			tfidf = self.get_tfidf_stat(doc, self.seeds_dic[c])
 			dic_scores[c] = tfidf
 
-		if len(set(list(dic_scores.values()))) == 1: 
-			if int(list(set(list(dic_scores.values())))[0]) == 0: #having tie: all 0 case
-				return "no_label"
-			else: #having tie: 
-				return list(dic_scores.keys())[0]
+		# print(dic_scores) #checking 
+
+		# if len(set(list(dic_scores.values()))) == 1: 
+		# 	if int(list(set(list(dic_scores.values())))[0]) == 0: #having tie: all 0 case
+		# 		return "no_label"
+		# 		print("we have no class for this document")
+		# 	else: #having tie: 
+		# 		return list(dic_scores.keys())[0]
+		# 		print("the tfidf are all the same for this document, weird...")
 
 		return max(dic_scores, key=dic_scores.get)
 

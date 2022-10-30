@@ -4,7 +4,7 @@ DSC180 Quarter 1 Project checkpoint on Oct 30, 2022
 ## Models' F1_Score Compared with Results in the Paper
 
 ![alt text](images/Week5_S_checkpoint/scores.png)
-the accuracy scores are highlighted in grey
+the accuracy scores are highlighted in yellow
 
 ## Difference with the Given Results
 

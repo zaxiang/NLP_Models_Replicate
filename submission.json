@@ -1,0 +1,4 @@
+{
+    "dockerhub-id": "zaxiang/NLP_Models_Replicate",
+    "build-script": "python run.py"
+}

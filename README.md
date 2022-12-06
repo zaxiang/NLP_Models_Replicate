@@ -1,5 +1,5 @@
 # NLP_Models_Replicate
-DSC180 Quarter 1 Project checkpoint on Oct 30, 2022
+DSC180 Quarter 1 Project
 
 ## Data:
 https://drive.google.com/drive/folders/1JnEphgsneXqbo71g3-xCgL9jSeA5lOO_?usp=share_link

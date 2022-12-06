@@ -46,6 +46,7 @@ class W2V_Runner:
 
 
 def main(targets):
+	print("2 tasks in total; they might takes a few minutes...")
 	TFIDF_runner('20news', 'coarse')
 	W2V_Runner('20news', 'coarse')
 

@@ -1,6 +1,9 @@
 # NLP_Models_Replicate
 DSC180 Quarter 1 Project checkpoint on Oct 30, 2022
 
+## Data:
+https://drive.google.com/drive/folders/1JnEphgsneXqbo71g3-xCgL9jSeA5lOO_?usp=share_link
+
 ## Models' F1_Score Compared with Results in the Paper
 
 ![alt text](images/Week5_S_checkpoint/scores.png)

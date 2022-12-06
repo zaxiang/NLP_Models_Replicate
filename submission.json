@@ -1,4 +1,4 @@
 {
-    "dockerhub-id": "zaxiang/ma3",
+    "dockerhub-id": "zaxiang/quarter1project",
     "build-script": "python run.py"
 }
